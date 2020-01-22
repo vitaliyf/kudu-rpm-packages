@@ -142,8 +142,7 @@ for executable in ${sbin_executables}; do
 done
 
 # install all the jars except original-, sources, tests, javadocs, and with-dependencies jars
-cp ${BUILD_DIR}/java/target/*.jar ${LIB_DIR}
-cp ${BUILD_DIR}/java/*/target/*.jar ${LIB_DIR}
+cp ${BUILD_DIR}/java/*/build/libs/*.jar ${LIB_DIR}
 rm -f ${LIB_DIR}/original-*.jar
 rm -f ${LIB_DIR}/*-tests.jar
 rm -f ${LIB_DIR}/*-sources.jar
@@ -247,10 +246,6 @@ cp -r ${BUILD_DIR}/build/release/client/usr/local/include/* ${PREFIX}/${SYSTEM_I
 cp -r ${BUILD_DIR}/build/release/client/usr/local/share ${PREFIX}/usr/share
 
 cp -r ${BUILD_DIR}/www ${LIB_DIR}/
-
-# Cloudera specific
-install -d -m 0755 ${LIB_DIR}/cloudera
-cp cloudera/cdh_version.properties ${LIB_DIR}/cloudera/
 
 # Copy the license files, folding the thirdparty licenses into the main file.
 install -d -m 0755 ${PREFIX}/${DOC_DIR}

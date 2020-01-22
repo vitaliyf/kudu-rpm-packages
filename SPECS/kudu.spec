@@ -18,6 +18,9 @@
 %define kudu_lib /var/lib/kudu
 %define kudu_doc %{_docdir}/%{name}-%{version}
 
+%define kudu_version 1.11.1
+%define kudu_release 1
+
 %if  %{!?suse_version:1}0
   %define initd_dir %{_sysconfdir}/rc.d/init.d
   %define alternatives_cmd alternatives
@@ -28,13 +31,13 @@
 
 Name: kudu
 Version: %{kudu_version}
-Release: %{kudu_release}
+Release: %{kudu_release}%{?dist}
 Summary: Columnar storage engine for Hadoop
-URL: http://www.cloudera.com
+URL: https://kudu.apache.org
 Group: Development/Libraries
-Buildroot: %{_topdir}/INSTALL/%{name}-%{version}
+BuildRoot: %{_topdir}/INSTALL/apache-%{name}-%{version}
 License: ASL 2.0
-Source0: kudu-%{kudu_patched_version}.tar.gz
+Source0: https://www-us.apache.org/dist/kudu/%{version}/apache-%{name}-%{version}.tar.gz
 Source1: do-component-build
 Source2: install_kudu.sh
 Source3: kudu-master.init
@@ -45,6 +48,7 @@ Requires: ntp
 Requires: /usr/sbin/useradd, openssl
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
+BuildRequires: redhat-lsb-core
 
 %description
 Columnar storage engine for Hadoop
@@ -89,13 +93,13 @@ Kudu client development package
 %endif
 
 %prep
-%setup -n %{name}-%{kudu_patched_version}
+%setup -n apache-%{name}-%{kudu_version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %build
-env FULL_VERSION=%{kudu_patched_version} bash %{SOURCE1}
+env FULL_VERSION=%{kudu_version} bash %{SOURCE1}
 
 %install
 %__rm -rf $RPM_BUILD_ROOT

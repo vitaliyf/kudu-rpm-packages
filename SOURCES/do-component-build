@@ -61,18 +61,8 @@ if [ -z "$GIT_REPO" ]; then
       popd
     done
 
-    # Build the java artifacts.
-    if [ -z "${DO_MAVEN_DEPLOY}" ]; then
-        MAVEN_INST_DEPLOY=install
-    else
-        MAVEN_INST_DEPLOY=$DO_MAVEN_DEPLOY
-    fi
-
     pushd java
-    COMMON_MAVEN_OPTS="-Xmx1536m -Xms256m -XX:MaxPermSize=256m"
-    MAVEN_OPTS="$COMMON_MAVEN_OPTS" mvn $MAVEN_INST_DEPLOY -DskipTests
-    # Build the spark_2.10 artifacts as well.
-    MAVEN_OPTS="$COMMON_MAVEN_OPTS" mvn -pl kudu-spark -P spark_2.10 -am $MAVEN_INST_DEPLOY -DskipTests
+    ./gradlew assemble
     popd
 
 else
@@ -80,10 +70,10 @@ else
     echo $(cd "$GIT_REPO" && git rev-parse HEAD) > kudu_git_hash
 
     # We're packaging up the source code to be built.
-    rm -rf build kudu-${FULL_VERSION}
+    rm -rf build apache-kudu-${FULL_VERSION}
     ALL_FILES=`echo *`
-    mkdir build kudu-${FULL_VERSION}
-    cp -r $ALL_FILES kudu-${FULL_VERSION}
-    tar czf build/kudu-${FULL_VERSION}.tar.gz kudu-${FULL_VERSION}
+    mkdir build apache-kudu-${FULL_VERSION}
+    cp -r $ALL_FILES apache-kudu-${FULL_VERSION}
+    tar czf build/apache-kudu-${FULL_VERSION}.tar.gz apache-kudu-${FULL_VERSION}
 fi
 
